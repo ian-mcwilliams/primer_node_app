@@ -1,5 +1,8 @@
 
+const morgan = require('morgan');
+const helmet = require('helmet');
 const Joi = require('joi');
+const logger = require('./logger');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,6 +14,14 @@ const courses = [
 ];
 
 app.use(express.json());
+app.use(helmet());
+
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  console.log('Morgan enabled...')
+}
+
+app.use(logger);
 
 const validateCourse = course => {
   const schema = {

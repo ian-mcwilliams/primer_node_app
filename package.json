@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ian-mcwilliams/primer_node_app#readme",
   "dependencies": {
+    "config": "^3.1.0",
     "express": "^4.16.4",
     "helmet": "^3.17.0",
     "joi": "^14.3.1",

@@ -1,4 +1,4 @@
-
+const config = require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Joi = require('joi');
@@ -15,6 +15,11 @@ const courses = [
 
 app.use(express.json());
 app.use(helmet());
+
+// Configuration
+console.log(`Application Name: ${config.get('name')}`);
+console.log(`Mail Server: ${config.get('mail.host')}`);
+console.log(`Mail Password: ${config.get('mail.password')}`);
 
 if (app.get('env') === 'development') {
   app.use(morgan('tiny'));

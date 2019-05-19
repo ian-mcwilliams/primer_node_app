@@ -14,6 +14,7 @@ const courses = [
 ];
 
 app.use(express.json());
+// use helmet security features for express app
 app.use(helmet());
 
 // Configuration

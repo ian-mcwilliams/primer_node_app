@@ -5,12 +5,14 @@ const helmet = require('helmet');
 const logger = require('./logger');
 const express = require('express');
 const app = express();
+const home = require('./routes/home');
 const courses = require('./routes/courses');
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 // use helmet security features for express app
 app.use(helmet());
+app.use('/', home);
 app.use('/api/courses/', courses);
 
 // Configuration
@@ -24,9 +26,5 @@ if (app.get('env') === 'development') {
 }
 
 app.use(logger);
-
-app.get('/', (req, res) => {
-  res.send('Hello World!!!');
-});
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -8,6 +8,9 @@ const express = require('express');
 const app = express();
 const home = require('./routes/home');
 const courses = require('./routes/courses');
+const customers = require('./routes/customers');
+debug(courses);
+debug(customers);
 const port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb://localhost/coursely')
@@ -19,6 +22,7 @@ app.use(express.json());
 app.use(helmet());
 app.use('/', home);
 app.use('/api/courses/', courses);
+app.use('/api/customers/', customers);
 
 // Configuration
 debug(`Application Name: ${config.get('name')}`);

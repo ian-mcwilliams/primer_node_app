@@ -1,63 +1,63 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 
-const courses = [
-  { id: 1, name: 'course1' },
-  { id: 2, name: 'course2' },
-  { id: 3, name: 'course3' }
-];
+const Course = mongoose.model('Course', new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  }
+}));
 
 const validateCourse = course => {
   const schema = {
-    name: Joi.string().min(3).required()
+    name: Joi.string().min(5).max(50).required()
   };
   return Joi.validate(course, schema);
 };
 
-const getCourse = courseId => {
-  return courses.find(c => c.id === parseInt(courseId));
-};
-
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const courses = await Course.find().sort('name');
   res.send(courses);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { error } = validateCourse(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const course = {
-    id: courses.length + 1,
-    name: req.body.name
-  };
-  courses.push(course);
+  let course = new Course({ name: req.body.name });
+  course = await course.save();
   res.send(course);
 });
 
-router.get('/:id', (req, res) => {
-  const course = getCourse(req.params.id);
+router.get('/:id', async (req, res) => {
+  const course = await Course.findById(req.params.id);
+
   if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
+
   res.send(course);
 });
 
-router.put('/:id', (req, res) => {
-  const course = getCourse(req.params.id);
-  if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
-
+router.put('/:id', async (req, res) => {
   const { error } = validateCourse(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  course.name = req.body.name;
+  const course = await Course.findByIdAndUpdate(req.params.id, { name: req.body.name }, {
+    new: true
+  });
+
+  if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
+
   res.send(course);
 });
 
-router.delete('/:id', (req, res) => {
-  const course = getCourse(req.params.id);
-  if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
+router.delete('/:id', async (req, res) => {
+  const course = await Course.findByIdAndRemove(req.params.id);
 
-  const index = courses.indexOf(course);
-  courses.splice(index, 1);
+  if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
 
   res.send(course);
 });

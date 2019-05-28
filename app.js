@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const debug = require('debug')('app:startup');
 const config = require('config');
 const morgan = require('morgan');
@@ -9,6 +10,10 @@ const home = require('./routes/home');
 const courses = require('./routes/courses');
 const port = process.env.PORT || 3000;
 
+mongoose.connect('mongodb://localhost/coursely')
+  .then(() => debug('Connected to MongoDB...'))
+  .catch(err => debug('ERROR - Could not connect to MongoDB...', err));
+
 app.use(express.json());
 // use helmet security features for express app
 app.use(helmet());
@@ -18,6 +23,8 @@ app.use('/api/courses/', courses);
 // Configuration
 debug(`Application Name: ${config.get('name')}`);
 debug(`Mail Server: ${config.get('mail.host')}`);
+// if the following line errors it may be because the password environment variable needs to be added
+// in the terminal window, eg: export app_password=1234
 debug(`Mail Password: ${config.get('mail.password')}`);
 
 if (app.get('env') === 'development') {

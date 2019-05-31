@@ -15,6 +15,12 @@ debug(courses);
 debug(customers);
 const port = process.env.PORT || 3000;
 
+// ensure jwtPrivateKey is set
+if (!config.get('jwtPrivateKey')) {
+  debug('FATAL ERROR: jwtPrivateKey is not defined.');
+  process.exit(1);
+}
+
 mongoose.connect('mongodb://localhost/coursely')
   .then(() => debug('Connected to MongoDB...'))
   .catch(err => debug('ERROR - Could not connect to MongoDB...', err));

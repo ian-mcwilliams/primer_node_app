@@ -8,20 +8,20 @@ router.get('/', async (req, res) => {
   res.send(courses);
 });
 
+router.get('/:id', async (req, res) => {
+  const course = await Course.findById(req.params.id);
+
+  if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
+
+  res.send(course);
+});
+
 router.post('/', auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let course = new Course({ name: req.body.name });
   course = await course.save();
-  res.send(course);
-});
-
-router.get('/:id', async (req, res) => {
-  const course = await Course.findById(req.params.id);
-
-  if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);
-
   res.send(course);
 });
 

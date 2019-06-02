@@ -1,4 +1,6 @@
 require('express-async-errors');
+const winston = require('winston');
+require('winston-mongodb');
 const mongoose = require('mongoose');
 const debug = require('debug')('app:startup');
 const config = require('config');
@@ -16,6 +18,19 @@ const users = require('./routes/users');
 debug(courses);
 debug(customers);
 const port = process.env.PORT || 3000;
+
+// handle uncaught exceptions exceptions and promise rejections outside of express
+winston.handleExceptions(new winston.transports.File({ filename: 'uncaughtExceptions.log' }));
+process.on('unhandledRejection', (ex) => {
+  throw ex;
+});
+
+// configure logging for unhandled errors in express
+winston.add(winston.transports.File, { filename: 'logfile.log '});
+winston.add(winston.transports.MongoDB, {
+  db: 'mongodb://localhost/coursely',
+  level: 'error'
+});
 
 // ensure jwtPrivateKey is set
 if (!config.get('jwtPrivateKey')) {

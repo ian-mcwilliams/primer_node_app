@@ -1,7 +1,6 @@
 require('express-async-errors');
 const winston = require('winston');
 require('winston-mongodb');
-const mongoose = require('mongoose');
 const debug = require('debug')('app:startup');
 const config = require('config');
 const helmet = require('helmet');
@@ -10,6 +9,7 @@ const logger = require('./middleware/logger');
 const express = require('express');
 const app = express();
 require('./startup/routes')(app);
+require('./startup/db')();
 const port = process.env.PORT || 3000;
 
 // handle uncaught exceptions exceptions and promise rejections outside of express
@@ -31,9 +31,7 @@ if (!config.get('jwtPrivateKey')) throw new Error('jwtPrivateKey is not defined.
 // ensure mail.password is set, eg: export coursely_mailPassword=mailPassword
 if (!config.get('mail.password')) throw new Error('mail.password is not defined.');
 
-mongoose.connect('mongodb://localhost/coursely')
-  .then(() => debug('Connected to MongoDB...'))
-  .catch(err => debug('ERROR - Could not connect to MongoDB...', err));
+
 
 // use helmet security features for express app
 app.use(helmet());

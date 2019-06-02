@@ -1,4 +1,3 @@
-const debug = require('debug')('app:startup');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./middleware/logger');
@@ -10,14 +9,12 @@ require('./startup/db')();
 require('./startup/config');
 const port = process.env.PORT || 3000;
 
-
-
 // use helmet security features for express app
 app.use(helmet());
 
 if (app.get('env') === 'development') {
   app.use(morgan('tiny'));
-  debug('Morgan enabled...')
+  winston.info('Morgan enabled...')
 }
 
 app.use(logger);

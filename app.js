@@ -1,6 +1,3 @@
-require('express-async-errors');
-const winston = require('winston');
-require('winston-mongodb');
 const debug = require('debug')('app:startup');
 const config = require('config');
 const helmet = require('helmet');
@@ -8,22 +5,10 @@ const morgan = require('morgan');
 const logger = require('./middleware/logger');
 const express = require('express');
 const app = express();
+require('./startup/logging')();
 require('./startup/routes')(app);
 require('./startup/db')();
 const port = process.env.PORT || 3000;
-
-// handle uncaught exceptions exceptions and promise rejections outside of express
-winston.handleExceptions(new winston.transports.File({ filename: 'uncaughtExceptions.log' }));
-process.on('unhandledRejection', (ex) => {
-  throw ex;
-});
-
-// configure logging for unhandled errors in express
-winston.add(winston.transports.File, { filename: 'logfile.log' });
-winston.add(winston.transports.MongoDB, {
-  db: 'mongodb://localhost/coursely',
-  level: 'error'
-});
 
 // ensure jwtPrivateKey is set, eg: export coursely_jwtPrivateKey=jwtPrivateKey
 if (!config.get('jwtPrivateKey')) throw new Error('jwtPrivateKey is not defined.');

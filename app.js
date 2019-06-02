@@ -4,19 +4,12 @@ require('winston-mongodb');
 const mongoose = require('mongoose');
 const debug = require('debug')('app:startup');
 const config = require('config');
-const morgan = require('morgan');
 const helmet = require('helmet');
+const morgan = require('morgan');
 const logger = require('./middleware/logger');
 const express = require('express');
 const app = express();
-const auth = require('./routes/auth');
-const error = require('./middleware/error');
-const home = require('./routes/home');
-const courses = require('./routes/courses');
-const customers = require('./routes/customers');
-const users = require('./routes/users');
-debug(courses);
-debug(customers);
+require('./startup/routes')(app);
 const port = process.env.PORT || 3000;
 
 // handle uncaught exceptions exceptions and promise rejections outside of express
@@ -32,25 +25,18 @@ winston.add(winston.transports.MongoDB, {
   level: 'error'
 });
 
-// ensure jwtPrivateKey is set
-if (!config.get('jwtPrivateKey')) {
-  debug('FATAL ERROR: jwtPrivateKey is not defined.');
-  process.exit(1);
-}
+// ensure jwtPrivateKey is set, eg: export coursely_jwtPrivateKey=jwtPrivateKey
+if (!config.get('jwtPrivateKey')) throw new Error('jwtPrivateKey is not defined.');
+
+// ensure mail.password is set, eg: export coursely_mailPassword=mailPassword
+if (!config.get('mail.password')) throw new Error('mail.password is not defined.');
 
 mongoose.connect('mongodb://localhost/coursely')
   .then(() => debug('Connected to MongoDB...'))
   .catch(err => debug('ERROR - Could not connect to MongoDB...', err));
 
-app.use(express.json());
 // use helmet security features for express app
 app.use(helmet());
-app.use('/', home);
-app.use('/api/auth', auth);
-app.use('/api/courses/', courses);
-app.use('/api/customers/', customers);
-app.use('/api/users/', users);
-app.use(error);
 
 // Configuration
 debug(`Application Name: ${config.get('name')}`);

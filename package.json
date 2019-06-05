@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest --watchAll"
+    "appStart": "export coursely_mailPassword=mailPassword && export coursely_jwtPrivateKey=jwtPrivateKey && DEBUG=app:* nodemon",
+    "test": "jest --watchAll --verbose"
   },
   "repository": {
     "type": "git",

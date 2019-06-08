@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
+const validateObjectId = require('../middleware/validateObjectId');
 const { Course, validate } = require('../models/course');
 
 router.get('/', async (req, res) => {
@@ -9,7 +10,7 @@ router.get('/', async (req, res) => {
   res.send(courses);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const course = await Course.findById(req.params.id);
 
   if (!course) return res.status(404).send(`No course was found with id ${req.params.id}`);

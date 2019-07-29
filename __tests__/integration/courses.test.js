@@ -76,5 +76,29 @@ describe('/api/courses', () => {
 
       expect(res.status).toBe(400);
     });
+
+    it('saves the genre if it is valid', async () => {
+      const token = new User().generateAuthToken();
+
+      await request(server)
+        .post('/api/courses')
+        .set('x-auth-token', token)
+        .send({ name: 'course1' });
+
+      const course = Course.find({ name: 'genre1' });
+      expect(course).not.toBeNull();
+    });
+
+    it('returns the genre if it is valid', async () => {
+      const token = new User().generateAuthToken();
+
+      const res = await request(server)
+        .post('/api/courses')
+        .set('x-auth-token', token)
+        .send({ name: 'course1' });
+
+      expect(res.body).toHaveProperty('_id');
+      expect(res.body).toHaveProperty('name');
+    });
   });
 });

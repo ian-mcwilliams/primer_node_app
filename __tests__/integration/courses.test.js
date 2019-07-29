@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { Course } = require('../../models/course');
+const { User } = require('../../models/user');
 
 let server;
 
@@ -50,6 +51,30 @@ describe('/api/courses', () => {
         .send({ name: 'course1' });
 
       expect(res.status).toBe(401);
+    });
+
+    it('returns a 400 if course is less than 5 characters', async () => {
+      const token = new User().generateAuthToken();
+
+      const res = await request(server)
+        .post('/api/courses')
+        .set('x-auth-token', token)
+        .send({ name: '1234' });
+
+      expect(res.status).toBe(400);
+    });
+
+    it('returns a 400 if course is more than 50 characters', async () => {
+      const token = new User().generateAuthToken();
+
+      const name = 'a'.repeat(51);
+
+      const res = await request(server)
+        .post('/api/courses')
+        .set('x-auth-token', token)
+        .send({ name: name });
+
+      expect(res.status).toBe(400);
     });
   });
 });

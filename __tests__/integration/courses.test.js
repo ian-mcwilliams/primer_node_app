@@ -8,8 +8,8 @@ describe('/api/courses', () => {
 
   beforeEach(() => { server = require('../../app')});
   afterEach(async () => {
-    server.close();
     await Course.remove({});
+    server.close();
   });
 
   describe('GET', () => {

@@ -85,13 +85,71 @@ describe('/api/courses', () => {
       expect(res.status).toBe(400);
     });
 
-    it('saves the genre if it is valid', async () => {
+    it('saves the course if it is valid', async () => {
       await exec();
       const course = Course.find({ name: 'genre1' });
       expect(course).not.toBeNull();
     });
 
-    it('returns the genre if it is valid', async () => {
+    it('returns the course if it is valid', async () => {
+      const res = await exec();
+      expect(res.body).toHaveProperty('_id');
+      expect(res.body).toHaveProperty('name');
+    });
+  });
+
+  describe('PUT /:id', () => {
+
+    let token;
+    let name;
+    let course_id;
+
+    const exec = async () => {
+      return await await request(server)
+        .put(`/api/courses/${course_id}`)
+        .set('x-auth-token', token)
+        .send({ name });
+    };
+
+    beforeEach(async () => {
+      const course = new Course({ name: 'course1' });
+      await course.save();
+      course_id = course._id;
+      token = new User().generateAuthToken();
+      name = 'course2';
+    });
+
+    it('returns a 401 if client is not logged in', async () => {
+      token = '';
+      const res = await exec();
+      expect(res.status).toBe(401);
+    });
+
+    it('returns a 400 if course is less than 5 characters', async () => {
+      name = '1234';
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('returns a 400 if course is more than 50 characters', async () => {
+      name = 'a'.repeat(51);
+      const res = await exec();
+      expect(res.status).toBe(400);
+    });
+
+    it('returns a 404 if no course exists for the id passed', async () => {
+      course_id = mongoose.Types.ObjectId();
+      const res = await exec();
+      expect(res.status).toBe(404);
+    });
+
+    it('saves the course if it is valid', async () => {
+      await exec();
+      const course = Course.find({ name: 'course2' });
+      expect(course).not.toBeNull();
+    });
+
+    it('returns the course if it is valid', async () => {
       const res = await exec();
       expect(res.body).toHaveProperty('_id');
       expect(res.body).toHaveProperty('name');

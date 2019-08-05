@@ -1,4 +1,5 @@
 const request = require('supertest');
+const mongoose = require('mongoose');
 const { Course } = require('../../models/course');
 const { User } = require('../../models/user');
 
@@ -39,7 +40,12 @@ describe('/api/courses', () => {
 
     it('returns a 404 if an invalid id is passed', async () => {
       const res = await request(server).get('/api/courses/1');
-      //
+      expect(res.status).toBe(404);
+    });
+
+    it('returns a 404 if no course exists for the id passed', async () => {
+      const id = mongoose.Types.ObjectId();
+      const res = await request(server).get(`/api/courses/${id}`);
       expect(res.status).toBe(404);
     });
   });

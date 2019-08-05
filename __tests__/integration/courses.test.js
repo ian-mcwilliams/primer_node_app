@@ -10,7 +10,7 @@ describe('/api/courses', () => {
   beforeEach(() => { server = require('../../app')});
   afterEach(async () => {
     await Course.remove({});
-    server.close();
+    await server.close();
   });
 
   describe('GET', () => {

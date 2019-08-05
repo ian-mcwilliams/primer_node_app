@@ -14,7 +14,7 @@ describe('auth middleware', () => {
 
   afterEach(async () => {
     await Course.remove({});
-    server.close();
+    await server.close();
   });
 
   const exec = () => {

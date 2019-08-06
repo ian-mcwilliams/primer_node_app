@@ -53,3 +53,13 @@ Example JSON body:
   "password": "12345"
 }
 ```
+
+If no valid user exists, create one with `POST http://localhost:3000/api/users` providing registration details in the body, the token is returned in the headers as `x-auth-token`.
+
+```
+{
+  "name": "John Doe"
+  "email": "email@test.aaa",
+  "password": "12345"
+}
+```

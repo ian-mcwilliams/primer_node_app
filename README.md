@@ -1,5 +1,7 @@
 # Primer Node App
 
+See [docker.md](./documentation/docker.md) for notes on Docker usage
+
 ## Run App
 
 In first terminal window, start Mongo DB

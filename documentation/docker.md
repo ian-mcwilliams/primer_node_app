@@ -118,3 +118,32 @@ Note that the shell type must be specified at the end and the specified shell mu
 ```
 docker container exec -it my_container bash
 ```
+
+### Healthcheck
+
+Add healthcheck to a container, via Dockerfile or docker-compose
+
+The arguments and command will vary depending on the container type
+
+Note particularly that use of `|| false` or `|| exit 1` is a workaround where a healthy container should return exit code 1
+
+In the Dockerfile (example for a postgres container)
+
+```
+HEALTHCHECK --interval=5s --timeout=3s \
+  CMD pg_isready -U postgres || exit 1
+```
+
+In a docker-compose file (nginx example)
+
+```
+version: "2.1"  # (minimum version for healthchecks)
+web:
+  image: nginx
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost"]
+    interval: 1m30s
+    timeout: 10s
+    retries: 3
+    start_period: 1m  # start_period requires version 3.4
+```

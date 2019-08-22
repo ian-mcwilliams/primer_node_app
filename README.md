@@ -1,6 +1,6 @@
 # Primer Node App
 
-See [docker.md](./documentation/docker.md) for notes on Docker usage
+See [docker.md](documentation/docker/docker.md) for notes on Docker usage
 
 ## Run App
 

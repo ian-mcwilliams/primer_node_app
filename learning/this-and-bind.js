@@ -34,16 +34,16 @@ console.log('');
 
 console.log('1b - Here we see that "this" outputs undefined when we store the method as a function');
 console.log('If strict mode is not set we get the full window object)');
-const walk_a = person.walk;
+const walkA = person.walk;
 console.log('Calling walk method from own reference...');
-walk_a();
+walkA();
 console.log('');
 
 console.log('1c - Here we see that using bind, "this" now outputs the full person object');
 console.log('If strict mode is not set we get the full window object)');
-const walk_b = person.walk.bind(person);
+const walkB = person.walk.bind(person);
 console.log('Calling walk method from own reference...');
-walk_b();
+walkB();
 console.log('');
 
 console.log('2 - Now we see that logging "this" inside a callback function using the function keyword returns the window object');

@@ -3,3 +3,4 @@ node_modules/
 /logfile.log
 /uncaughtExceptions.log
 coverage/
+package-lock.json

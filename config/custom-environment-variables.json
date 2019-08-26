@@ -2,5 +2,9 @@
   "mail": {
     "password": "coursely_mailPassword"
   },
-  "jwtPrivateKey": "coursely_jwtPrivateKey"
+  "jwtPrivateKey": "coursely_jwtPrivateKey",
+  "mongo": {
+    "hostname": "MONGO_HOSTNAME",
+    "port": "MONGO_PORT"
+  }
 }

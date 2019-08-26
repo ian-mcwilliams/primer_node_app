@@ -7,7 +7,7 @@ let server;
 
 describe('/api/courses', () => {
 
-  beforeEach(() => { server = require('../../app')});
+  beforeEach(async () => { server = await require('../../app')});
   afterEach(async () => {
     await Course.remove({});
     await server.close();

@@ -7,8 +7,8 @@ let server;
 describe('auth middleware', () => {
   let token;
 
-  beforeEach(() => {
-    server = require('../../app');
+  beforeEach(async () => {
+    server = await require('../../app');
     token = new User().generateAuthToken();
   });
 

@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/ian-mcwilliams/primer_node_app#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcryptjs": "^2.4.3",
     "config": "^3.1.0",
     "express": "^4.16.4",
     "express-async-errors": "^3.1.1",

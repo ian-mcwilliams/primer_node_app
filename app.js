@@ -24,6 +24,6 @@ if (app.get('env') === 'development') {
 
 app.use(logger);
 
-const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
+const server = app.listen(port, () => winston.info(`Listening on port ${port}...`));
 
 module.exports = server;

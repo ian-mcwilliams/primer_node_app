@@ -8,7 +8,9 @@
     "test": "jest --watchAll --verbose --coverage --runInBand"
   },
   "jest": {
-    "setupFilesAfterEnv": ["jest-extended"]
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ]
   },
   "repository": {
     "type": "git",

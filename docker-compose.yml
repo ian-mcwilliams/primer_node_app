@@ -1,0 +1,42 @@
+version: '2.3'
+services:
+  node:
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    user: node
+    ports:
+      - 3000:3000
+    image: node:12.8.1
+    container_name: backend
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=development
+      - coursely_mailPassword=mailPassword
+      - coursely_jwtPrivateKey=jwtPrivateKey
+      - MONGO_HOSTNAME=mongo
+      - MONGO_PORT=27017
+    depends_on:
+      mongo:
+        condition: service_healthy
+    volumes:
+      - ./:/home/node/app
+    healthcheck:
+      disable: true
+    command: npm run ciStart
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    container_name: db
+    restart: always
+    expose:
+      - 27017
+    command: mongod --port 27017 --bind_ip_all
+    healthcheck:
+      test: "[ `echo 'db.runCommand(\"ping\").ok' | mongo localhost/example-database --quiet` ] && echo 0 || echo 1"
+      interval: 20s
+      timeout: 4s
+      retries: 3

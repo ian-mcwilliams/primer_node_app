@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "appStart": "export MONGO_HOSTNAME=localhost && export MONGO_PORT=27017 && export coursely_mailPassword=mailPassword && export coursely_jwtPrivateKey=jwtPrivateKey && DEBUG=app:* nodemon",
+    "ciStart": "npm install && node app.js",
+    "ciTest": "npm install && jest --watchAll --verbose --coverage --runInBand",
     "test": "export MONGO_HOSTNAME=localhost && export MONGO_PORT=27017 && jest --watchAll --verbose --coverage --runInBand"
   },
   "jest": {
